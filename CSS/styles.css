@@ -1,0 +1,619 @@
+/* VARIABLES DE DISEÑO */
+:root {
+    --bg-sidebar: #131517;
+    --bg-main: #F8F6F2;
+    --bg-card: #FFFFFF;
+    --orange-accent: #E86319;
+    --green-btn: #32992B;
+    --green-bg-light: #EBF7EB;
+    --text-dark: #202224;
+    --text-light: #A0A5A9;
+    --danger-red: #D94343;
+    --border-color: #EAEAEA;
+    --occupied-bg: #FEEFEE;
+    --occupied-text: #D94343;
+    --ready-bg: #E6F4EA;
+    --ready-text: #137333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-dark);
+    height: 100vh;
+    overflow: hidden;
+}
+
+.app-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* BARRA LATERAL (SIDEBAR) */
+.sidebar {
+    width: 260px;
+    background-color: var(--bg-sidebar);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
+    justify-content: space-between;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+    padding: 0 8px;
+}
+
+.logo-placeholder {
+    background: linear-gradient(135deg, #FF8008, #FFC837);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.brand h1 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.brand .slogan {
+    font-size: 12px;
+    color: var(--orange-accent);
+    font-style: italic;
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.nav-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.nav-btn i {
+    width: 20px;
+    text-align: center;
+}
+
+.nav-btn.active {
+    background-color: var(--orange-accent);
+    color: white;
+}
+
+.kitchen-badge {
+    background-color: var(--danger-red);
+    color: white;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    position: absolute;
+    right: 12px;
+}
+
+.sidebar-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-top: 1px solid #26292D;
+    padding-top: 16px;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #1A1D20;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.profile-arrow {
+    margin-left: auto;
+    font-size: 12px !important;
+    color: var(--text-light);
+}
+
+.logout-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* CONTENIDO PRINCIPAL */
+.main-content {
+    flex-grow: 1;
+    height: 100%;
+    position: relative;
+}
+
+/* MANEJO DE PANTALLAS */
+.screen {
+    display: none;
+    padding: 32px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+}
+
+h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.subtitle {
+    color: #64748B;
+    margin-bottom: 24px;
+}
+
+/* GRID DE MESAS */
+.tables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.table-card {
+    background-color: var(--bg-card);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #EFEFEF;
+    position: relative;
+}
+
+.table-card:hover {
+    transform: translateY(-4px);
+}
+
+.table-ready-alert {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: var(--green-btn);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(50, 153, 43, 0.4);
+    animation: pulse-green 2s infinite;
+    z-index: 2;
+}
+
+@keyframes pulse-green {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(50, 153, 43, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(50, 153, 43, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(50, 153, 43, 0); }
+}
+
+.table-icon-wrapper i {
+    font-size: 48px;
+    color: #4A5568;
+    margin-bottom: 12px;
+}
+
+.table-card h3 {
+    margin-top: 8px;
+}
+
+.status-badge {
+    display: inline-block;
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+.status-badge.disponible {
+    background-color: var(--green-bg-light);
+    color: var(--green-btn);
+}
+
+.status-badge.ocupado {
+    background-color: var(--occupied-bg);
+    color: var(--occupied-text);
+}
+
+.brand-footer-watermark {
+    margin-top: auto;
+    text-align: center;
+    padding: 20px;
+    opacity: 0.3;
+}
+
+/* DETALLE DEL PEDIDO Y MENÚ */
+.order-layout {
+    display: flex;
+    gap: 24px;
+    height: calc(100% - 100px);
+}
+
+.menu-container {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-categories {
+    display: flex;
+    gap: 10px;
+    margin: 16px 0;
+}
+
+.category-btn {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #64748B;
+}
+
+.category-btn.active {
+    background-color: var(--orange-accent);
+    color: white;
+    border-color: var(--orange-accent);
+}
+
+.menu-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.menu-item {
+    background-color: white;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid #EFEFEF;
+}
+
+.menu-item-icon {
+    width: 45px;
+    height: 45px;
+    background-color: #F1F5F9;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--orange-accent);
+}
+
+.item-details {
+    flex-grow: 1;
+}
+
+.add-item-btn {
+    background-color: #FFF0E6;
+    border: none;
+    color: var(--orange-accent);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* PANEL DERECHO: CUENTA */
+.receipt-container {
+    flex: 2;
+    background-color: white;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #EFEFEF;
+}
+
+.receipt-items {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.receipt-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.receipt-qty-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.qty-btn {
+    background-color: #F1F5F9;
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.receipt-item-price {
+    font-weight: 600;
+    width: 50px;
+    text-align: right;
+}
+
+.delete-item-btn {
+    background: transparent;
+    border: none;
+    color: #FF8A8A;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.order-notes input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: #FAFAFA;
+}
+
+.receipt-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px dashed var(--border-color);
+    padding-top: 16px;
+}
+
+.total-amount {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--green-btn);
+}
+
+.receipt-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.cancel-order-btn {
+    flex: 1;
+    background-color: transparent;
+    border: 1px solid #FFCDCD;
+    color: var(--danger-red);
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.kitchen-order-btn {
+    flex: 2;
+    background-color: var(--green-btn);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* HISTORIAL DE PEDIDOS */
+.history-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.history-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.history-card-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+.order-status-tag {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.order-status-tag.preparando {
+    background-color: #FFF3CD;
+    color: #856404;
+}
+
+.order-status-tag.listo {
+    background-color: var(--ready-bg);
+    color: var(--ready-text);
+}
+
+/* ========================================= */
+/* OPTIMIZACIÓN EXCLUSIVA PARA PANTALLA DE COCINA GRANDE  */
+/* ========================================= */
+
+.kitchen-main-title {
+    font-size: 36px; /* Título de pantalla de producción más grande */
+    color: #1A202C;
+}
+
+.kitchen-main-subtitle {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.kitchen-orders-grid {
+    display: grid;
+    /* En pantallas grandes genera columnas anchas y cómodas */
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 26px;
+}
+
+.kitchen-card {
+    background-color: #FFFFFF;
+    border: 2px solid var(--border-color);
+    border-left: 10px solid var(--orange-accent); /* Borde de mesa mucho más visible */
+    border-radius: 16px;
+    padding: 26px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 380px; /* Tarjeta con cuerpo espacioso */
+}
+
+.kitchen-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 800;
+    font-size: 26px; /* Nombre de mesa gigante para leer de lejos */
+    border-bottom: 2px solid #EDF2F7;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+    color: #1A202C;
+}
+
+.kitchen-card-header .time {
+    font-size: 16px;
+    color: #718096;
+    font-weight: 600;
+    background-color: #F7FAFC;
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+.kitchen-card-body {
+    flex-grow: 1;
+    margin-bottom: 20px;
+}
+
+.kitchen-item-row {
+    font-size: 22px; /* TIPOGRAFÍA GIGANTE PARA LOS PLATILLOS (TACOS, ETC) */
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #2D3748;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.kitchen-item-row strong {
+    color: var(--orange-accent);
+    font-size: 26px; /* El número de cantidad resalta todavía más */
+    background-color: #FFF5F0;
+    padding: 2px 10px;
+    border-radius: 6px;
+}
+
+/* Bloque de notas ultra-llamativo para evitar errores de cocina */
+.kitchen-notes-block {
+    margin-top: 18px;
+    background-color: #FFF6F0; 
+    border: 2px dashed #FBD38D; 
+    padding: 14px;
+    border-radius: 10px;
+    font-style: normal;
+    font-size: 17px; /* Letra de observaciones más grande */
+    font-weight: 700;
+    color: #C05613;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.4;
+}
+
+.kitchen-notes-block i {
+    margin-top: 3px;
+    font-size: 18px;
+}
+
+/* Botón grande y fácil de presionar en pantallas táctiles de cocina */
+.kitchen-ready-btn {
+    width: 100%;
+    background-color: var(--green-btn);
+    color: white;
+    border: none;
+    padding: 18px; /* Botón más gordo */
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 18px; /* Texto de botón grande */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(50, 153, 43, 0.2);
+    transition: background 0.2s, transform 0.1s;
+}
+
+.kitchen-ready-btn:active {
+    transform: scale(0.98);
+    background-color: #267520;
+}

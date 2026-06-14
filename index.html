@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birria-Tita | Sistema de Mesas</title>
+    <link rel="stylesheet" href="CSS/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo-placeholder"><i class="fa-solid fa-fire-burner"></i></div>
+                <div>
+                    <h1>Birria-Tita</h1>
+                    <p class="slogan">¡La mera mera!</p>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-btn active" id="btn-nav-mesas" onclick="showTablesScreen()">
+                    <i class="fa-solid fa-table-cells-large"></i> Mesas
+                </button>
+                <button class="nav-btn" id="btn-nav-pedidos" onclick="showOrdersHistoryScreen()">
+                    <i class="fa-solid fa-receipt"></i> Pedidos
+                </button>
+                <button class="nav-btn" id="btn-nav-cocina" onclick="showKitchenScreen()">
+                    <i class="fa-solid fa-kitchen-set"></i> Cocina <span class="kitchen-badge" id="kitchen-count">0</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span>Mesero / Chef</span>
+                    <i class="fa-solid fa-chevron-down profile-arrow"></i>
+                </div>
+                <button class="logout-btn">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            
+            <section id="screen-tables" class="screen active">
+                <h2>Mesas</h2>
+                <p class="subtitle">Selecciona una mesa para comenzar</p>
+                
+                <div class="tables-grid" id="tables-grid-container">
+                    </div>
+
+                <div class="brand-footer-watermark">
+                    <span>Birria-Tita</span>
+                    <small>¡La mera mera!</small>
+                </div>
+            </section>
+
+            <section id="screen-order" class="screen">
+                <div class="order-header">
+                    <div class="order-header-left">
+                        <button class="back-btn" onclick="showTablesScreen()">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <h2 id="current-table-title">Mesa 1</h2>
+                    </div>
+                    <div class="order-header-right">
+                        <span class="table-capacity-tag"><i class="fa-solid fa-users"></i> <span id="current-table-cap">2 Personas</span></span>
+                        <button class="close-table-btn" onclick="liberarMesaActual()">Liberar mesa</button>
+                    </div>
+                </div>
+
+                <div class="order-layout">
+                    <div class="menu-container">
+                        <h3>Menú</h3>
+                        <div class="menu-categories">
+                            <button class="category-btn active" onclick="filterCategory('tacos', this)">TACOS</button>
+                            <button class="category-btn" onclick="filterCategory('bebidas', this)">BEBIDAS</button>
+                            <button class="category-btn" onclick="filterCategory('extras', this)">EXTRAS</button>
+                            <button class="category-btn" onclick="filterCategory('combos', this)">COMBOS</button>
+                        </div>
+
+                        <div class="menu-items-list" id="menu-items-container">
+                            </div>
+                    </div>
+
+                    <div class="receipt-container">
+                        <h3>Pedido</h3>
+                        
+                        <div class="receipt-items" id="receipt-items-container">
+                            </div>
+
+                        <div class="order-notes">
+                            <label>Notas del pedido</label>
+                            <input type="text" id="order-notes-input" placeholder="Agregar instrucciones (ej. sin cebolla)...">
+                        </div>
+
+                        <div class="receipt-total-row">
+                            <span>Total</span>
+                            <span class="total-amount" id="order-total-val">$0</span>
+                        </div>
+
+                        <div class="receipt-actions">
+                            <button class="cancel-order-btn" onclick="clearOrder()">Cancelar</button>
+                            <button class="kitchen-order-btn" onclick="sendToKitchen()"><i class="fa-solid fa-paper-plane"></i> Enviar a cocina</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="screen-orders-history" class="screen">
+                <h2>Historial de Pedidos</h2>
+                <p class="subtitle">Registro y estado actual de las comandas</p>
+                
+                <div class="history-container" id="history-orders-list">
+                    </div>
+            </section>
+
+            <section id="screen-kitchen" class="screen">
+                <h2 class="kitchen-main-title">Panel de Cocina Real-Time</h2>
+                <p class="subtitle kitchen-main-subtitle">Órdenes activas en preparación</p>
+                
+                <div class="kitchen-orders-grid" id="kitchen-orders-list">
+                    </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="JS/app.js"></script>
+</body>
+</html>
