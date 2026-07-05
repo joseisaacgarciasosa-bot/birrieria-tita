@@ -1,3 +1,9 @@
+// =========================================================================
+// CONFIGURACIÓN DE TU BASE DE DATOS DE GOOGLE SHEETS
+// REEMPLAZA ESTO CON LA URL LARGA DE TU GOOGLE APPS SCRIPT QUE TERMINA EN /exec
+// =========================================================================
+const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbx1oGqwgg2G07TQJDlhcajiDIbpBcVzIOPD06-ke5N5mExCUt_icEQga6htfhPR8iSM/exec";
+
 // Base de datos de productos con clases de Font Awesome
 const productsDatabase = {
     tacos: [
@@ -179,19 +185,23 @@ function renderOrder() {
     orderTotalVal.textContent = `$${total}`;
 }
 
-// Envío a cocina
+// Envío a cocina y respaldo en la nube (Google Sheets)
 function sendToKitchen() {
     if (orderCart.length === 0) { alert("Agrega productos antes de enviar."); return; }
 
     const table = tablesState.find(t => t.id === currentTableId);
     const totalAmount = orderCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    
+    // Captura de fecha y hora del sistema
     const now = new Date();
+    const dateString = now.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
     const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const orderId = Date.now();
 
     const orderData = {
         id: orderId,
         tableName: table ? table.name : 'Barra',
+        date: dateString, // Nueva propiedad: Fecha
         time: timeString,
         items: [...orderCart],
         notes: orderNotesInput.value.trim(),
@@ -199,6 +209,7 @@ function sendToKitchen() {
         status: 'PREPARANDO'
     };
 
+    // 1. Guardar de forma local en la memoria de la App
     savedOrders.unshift(orderData);
     localStorage.setItem('savedOrders', JSON.stringify(savedOrders));
 
@@ -212,7 +223,26 @@ function sendToKitchen() {
     }
 
     updateKitchenBadge();
-    alert(`¡Comanda enviada a Cocina!`);
+
+    // 2. Mandar a la Base de Datos en la nube (Google Sheets) de fondo
+    if (GOOGLE_SHEETS_URL && GOOGLE_SHEETS_URL !== "AQUÍ_PEGA_TU_URL_DE_APPS_SCRIPT_QUE_TERMINA_EN_EXEC") {
+        fetch(GOOGLE_SHEETS_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderData)
+        })
+        .then(() => {
+            console.log("Orden guardada con éxito en Google Sheets.");
+        })
+        .catch(err => {
+            console.error("Error al conectar con la hoja de cálculo: ", err);
+        });
+    }
+
+    alert(`¡Comanda enviada a Cocina y guardada en Google Sheets!`);
     showTablesScreen();
 }
 
@@ -273,6 +303,7 @@ function updateKitchenBadge() {
     kitchenCountBadge.style.display = kitchenOrders.length === 0 ? 'none' : 'inline-block';
 }
 
+// Modificación en el Apps Script para procesar la nueva columna de fecha
 function liberarMesaActual() {
     if(!currentTableId) return;
     const table = tablesState.find(t => t.id === currentTableId);
