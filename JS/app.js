@@ -141,6 +141,7 @@ function setActiveScreen(screenElement, navButtonElement) {
     if(navButtonElement) navButtonElement.classList.add('active');
 }
 
+// Control del carrito
 function addToOrder(name, price) {
     const existingItem = orderCart.find(item => item.name === name);
     if (existingItem) { existingItem.qty += 1; } else { orderCart.push({ name, price, qty: 1 }); }
@@ -178,6 +179,7 @@ function renderOrder() {
     orderTotalVal.textContent = `$${total}`;
 }
 
+// Envío a cocina
 function sendToKitchen() {
     if (orderCart.length === 0) { alert("Agrega productos antes de enviar."); return; }
 
