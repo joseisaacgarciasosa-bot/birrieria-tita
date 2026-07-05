@@ -192,7 +192,7 @@ function sendToKitchen() {
     const table = tablesState.find(t => t.id === currentTableId);
     const totalAmount = orderCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
     
-    // Captura de fecha y hora del sistema
+    // Captura estructurada de fecha y hora locales
     const now = new Date();
     const dateString = now.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
     const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -225,7 +225,7 @@ function sendToKitchen() {
     updateKitchenBadge();
 
     // 2. Mandar a la Base de Datos en la nube (Google Sheets) de fondo
-    if (GOOGLE_SHEETS_URL && GOOGLE_SHEETS_URL !== "AQUÍ_PEGA_TU_URL_DE_APPS_SCRIPT_QUE_TERMINA_EN_EXEC") {
+    if (GOOGLE_SHEETS_URL && GOOGLE_SHEETS_URL !== "https://script.google.com/macros/s/AKfycbx1oGqwgg2G07TQJDlhcajiDIbpBcVzIOPD06-ke5N5mExCUt_icEQga6htfhPR8iSM/exec") {
         fetch(GOOGLE_SHEETS_URL, {
             method: 'POST',
             mode: 'no-cors',
@@ -303,7 +303,6 @@ function updateKitchenBadge() {
     kitchenCountBadge.style.display = kitchenOrders.length === 0 ? 'none' : 'inline-block';
 }
 
-// Modificación en el Apps Script para procesar la nueva columna de fecha
 function liberarMesaActual() {
     if(!currentTableId) return;
     const table = tablesState.find(t => t.id === currentTableId);
