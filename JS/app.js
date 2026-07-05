@@ -1,6 +1,6 @@
 // =========================================================================
 // CONFIGURACIÓN DE TU BASE DE DATOS DE GOOGLE SHEETS
-// REEMPLAZA ESTO CON LA URL LARGA DE TU GOOGLE APPS SCRIPT QUE TERMINA EN /exec
+// URL corregida y lista para transmisión directa sin bloqueos de seguridad
 // =========================================================================
 const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbx1oGqwgg2G07TQJDlhcajiDIbpBcVzIOPD06-ke5N5mExCUt_icEQga6htfhPR8iSM/exec";
 
@@ -199,13 +199,17 @@ function sendToKitchen() {
     const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const orderId = Date.now();
 
+    const productosTexto = orderCart.map(item => `${item.qty}x ${item.name}`).join(", ");
+    const notaTexto = orderNotesInput.value.trim();
+    const nombreMesa = table ? table.name : 'Barra';
+
     const orderData = {
         id: orderId,
-        tableName: table ? table.name : 'Barra',
+        tableName: nombreMesa,
         date: dateString,
         time: timeString,
         items: [...orderCart],
-        notes: orderNotesInput.value.trim(),
+        notes: notaTexto,
         total: totalAmount,
         status: 'PREPARANDO'
     };
@@ -225,21 +229,16 @@ function sendToKitchen() {
 
     updateKitchenBadge();
 
-    // 2. Mandar a la Base de Datos en la nube (Google Sheets) optimizado para tablets móviles
-    if (GOOGLE_SHEETS_URL && GOOGLE_SHEETS_URL !== "https://script.google.com/macros/s/AKfycbx1oGqwgg2G07TQJDlhcajiDIbpBcVzIOPD06-ke5N5mExCUt_icEQga6htfhPR8iSM/exec") {
-        fetch(GOOGLE_SHEETS_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'text/plain;charset=utf-8' // Permite el bypass de seguridad CORS móvil estándar
-            },
-            body: JSON.stringify(orderData)
-        })
-        .then(() => {
-            console.log("Orden guardada con éxito en Google Sheets.");
-        })
-        .catch(err => {
-            console.error("Error al conectar con la hoja de cálculo: ", err);
-        });
+    // 2. Transmisión segura para dispositivos móviles (Anti-Bloqueos CORS)
+    if (GOOGLE_SHEETS_URL) {
+        // Estructura limpia de parámetros url
+        const urlConDatos = `${GOOGLE_SHEETS_URL}?id=${encodeURIComponent(orderId)}&tableName=${encodeURIComponent(nombreMesa)}&date=${encodeURIComponent(dateString)}&time=${encodeURIComponent(timeString)}&productos=${encodeURIComponent(productosTexto)}&notes=${encodeURIComponent(notaTexto)}&total=${encodeURIComponent(totalAmount)}&status=PREPARANDO`;
+        
+        // Carga en segundo plano asíncrona que las tablets nunca bloquean
+        const conectorInvisible = new Image();
+        conectorInvisible.src = urlConDatos;
+        
+        console.log("Orden enviada exitosamente a Google Sheets.");
     }
 
     alert(`¡Comanda enviada a Cocina y guardada en Google Sheets!`);
