@@ -199,25 +199,28 @@ h2 {
     z-index: 1;
 }
 
-/* Inyección controlada de la marca de agua con pseudo-elemento */
+/* Logotipo de fondo perfectamente centrado en Tablets y Monitores */
 #screen-tables::before {
     content: "";
     position: absolute;
+    
+    /* Centrado exacto basado en el contenedor responsivo */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 450px; /* Tamaño un poco más grande para lucir más el diseño */
+    
+    width: 450px; 
     height: 450px;
     
-    /* Ruta absoluta para el entorno de desarrollo local */
+    /* Imagen del chivito mesero */
     background-image: url('/imgs/Logo.png'); 
     
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    opacity: 0.12; /* Ajustado al 12% para que tenga mayor presencia comercial sin tapar las tarjetas */
-    z-index: -1; /* Forzado al fondo absoluto de la sección clara */
-    pointer-events: none; /* Crucial: los clics pasan de largo, permitiendo tocar las mesas sin problemas */
+    opacity: 0.12; 
+    z-index: -1; 
+    pointer-events: none; /* Los clics pasan de largo hacia las mesas perfectamente */
 }
 
 .tables-grid {
