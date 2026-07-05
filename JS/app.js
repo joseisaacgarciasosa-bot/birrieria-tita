@@ -136,6 +136,7 @@ function openTable(tableId) {
     setActiveScreen(screenOrder, btnNavMesas);
 }
 
+// Manejo de pantallas navegación
 function showTablesScreen() { setActiveScreen(screenTables, btnNavMesas); currentTableId = null; }
 function showOrdersHistoryScreen() { setActiveScreen(screenHistory, btnNavPedidos); renderOrdersHistory(); }
 function showKitchenScreen() { setActiveScreen(screenKitchen, btnNavCocina); renderKitchenOrders(); }
@@ -201,7 +202,7 @@ function sendToKitchen() {
     const orderData = {
         id: orderId,
         tableName: table ? table.name : 'Barra',
-        date: dateString, // Nueva propiedad: Fecha
+        date: dateString,
         time: timeString,
         items: [...orderCart],
         notes: orderNotesInput.value.trim(),
@@ -224,13 +225,12 @@ function sendToKitchen() {
 
     updateKitchenBadge();
 
-    // 2. Mandar a la Base de Datos en la nube (Google Sheets) de fondo
+    // 2. Mandar a la Base de Datos en la nube (Google Sheets) optimizado para tablets móviles
     if (GOOGLE_SHEETS_URL && GOOGLE_SHEETS_URL !== "https://script.google.com/macros/s/AKfycbx1oGqwgg2G07TQJDlhcajiDIbpBcVzIOPD06-ke5N5mExCUt_icEQga6htfhPR8iSM/exec") {
         fetch(GOOGLE_SHEETS_URL, {
             method: 'POST',
-            mode: 'no-cors',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'text/plain;charset=utf-8' // Permite el bypass de seguridad CORS móvil estándar
             },
             body: JSON.stringify(orderData)
         })
