@@ -197,6 +197,7 @@ h2 {
 #screen-tables {
     position: relative;
     z-index: 1;
+    min-height: 100%; /* Forzamos a que la sección use todo el alto disponible de la tablet */
 }
 
 /* Logotipo de fondo perfectamente centrado en Tablets y Monitores */
@@ -204,7 +205,7 @@ h2 {
     content: "";
     position: absolute;
     
-    /* Centrado exacto basado en el contenedor responsivo */
+    /* Centrado matemático exacto */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -212,15 +213,15 @@ h2 {
     width: 450px; 
     height: 450px;
     
-    /* Imagen del chivito mesero */
-    background-image: url('/imgs/Logo.png'); 
+    /* Ruta corregida con punto relativo para compatibilidad con GitHub Pages y tablets */
+    background-image: url('./imgs/Logo.png'); 
     
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     opacity: 0.12; 
     z-index: -1; 
-    pointer-events: none; /* Los clics pasan de largo hacia las mesas perfectamente */
+    pointer-events: none; /* Los clics pasan de largo hacia las tarjetas sin bloquearse */
 }
 
 .tables-grid {
